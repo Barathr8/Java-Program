@@ -1,0 +1,161 @@
+import java.util.*;
+
+// Abstract Class
+abstract class Bank {
+    abstract void deposit(double amount);
+    abstract void withdraw(double amount);
+}
+
+// Parent Class
+class Account extends Bank {
+
+    private int accountNumber;
+    private String name;
+    protected double balance;
+
+    public Account(int accountNumber, String name, double balance) {
+        this.accountNumber = accountNumber;
+        this.name = name;
+        this.balance = balance;
+    }
+
+    public int getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void displayAccount() {
+        System.out.println("Account No: " + accountNumber);
+        System.out.println("Name: " + name);
+        System.out.println("Balance: " + balance);
+    }
+
+    @Override
+    public void deposit(double amount) {
+        balance += amount;
+        System.out.println("Amount Deposited Successfully");
+    }
+
+    @Override
+    public void withdraw(double amount) {
+        if (amount > balance) {
+            System.out.println("Insufficient Balance");
+        } else {
+            balance -= amount;
+            System.out.println("Withdrawal Successful");
+        }
+    }
+}
+
+// Child Class (Inheritance)
+class SavingsAccount extends Account {
+
+    private double interestRate = 5;
+
+    public SavingsAccount(int accountNumber, String name, double balance) {
+        super(accountNumber, name, balance);
+    }
+
+    public void addInterest() {
+        double interest = balance * interestRate / 100;
+        balance += interest;
+        System.out.println("Interest Added: " + interest);
+    }
+}
+
+public class BankManagementSystem {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        ArrayList<SavingsAccount> accounts = new ArrayList<>();
+
+        int choice;
+
+        do {
+
+            System.out.println("\n--- BANK MENU ---");
+            System.out.println("1. Create Account");
+            System.out.println("2. Deposit");
+            System.out.println("3. Withdraw");
+            System.out.println("4. Display Account");
+            System.out.println("5. Add Interest");
+            System.out.println("6. Exit");
+
+            System.out.print("Enter Choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+
+                case 1:
+                    System.out.print("Enter Account Number: ");
+                    int acc = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print("Enter Name: ");
+                    String name = sc.nextLine();
+
+                    System.out.print("Enter Initial Balance: ");
+                    double bal = sc.nextDouble();
+
+                    SavingsAccount newAccount = new SavingsAccount(acc, name, bal);
+                    accounts.add(newAccount);
+
+                    System.out.println("Account Created Successfully");
+                    break;
+
+                case 2:
+                    System.out.print("Enter Account Number: ");
+                    int accNo = sc.nextInt();
+
+                    for (SavingsAccount a : accounts) {
+                        if (a.getAccountNumber() == accNo) {
+                            System.out.print("Enter Amount: ");
+                            double dep = sc.nextDouble();
+                            a.deposit(dep);
+                        }
+                    }
+                    break;
+
+                case 3:
+                    System.out.print("Enter Account Number: ");
+                    int accNo2 = sc.nextInt();
+
+                    for (SavingsAccount a : accounts) {
+                        if (a.getAccountNumber() == accNo2) {
+                            System.out.print("Enter Amount: ");
+                            double wd = sc.nextDouble();
+                            a.withdraw(wd);
+                        }
+                    }
+                    break;
+
+                case 4:
+                    for (SavingsAccount a : accounts) {
+                        a.displayAccount();
+                    }
+                    break;
+
+                case 5:
+                    System.out.print("Enter Account Number: ");
+                    int accNo3 = sc.nextInt();
+
+                    for (SavingsAccount a : accounts) {
+                        if (a.getAccountNumber() == accNo3) {
+                            a.addInterest();
+                        }
+                    }
+                    break;
+
+                case 6:
+                    System.out.println("Thank you for using Bank System");
+                    break;
+
+                default:
+                    System.out.println("Invalid Choice");
+            }
+
+        } while (choice != 6);
+
+        sc.close();
+    }
+}
