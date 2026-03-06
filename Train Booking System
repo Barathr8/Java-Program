@@ -1,0 +1,123 @@
+import java.util.*;
+
+// Abstract Class
+abstract class TrainService {
+    abstract void bookTicket(int seats);
+    abstract void cancelTicket(int seats);
+}
+
+// Train Class
+class Train extends TrainService {
+
+    private int trainNumber;
+    private String trainName;
+    private int availableSeats;
+
+    public Train(int trainNumber, String trainName, int seats) {
+        this.trainNumber = trainNumber;
+        this.trainName = trainName;
+        this.availableSeats = seats;
+    }
+
+    public int getTrainNumber() {
+        return trainNumber;
+    }
+
+    public void displayTrain() {
+        System.out.println("Train Number: " + trainNumber);
+        System.out.println("Train Name: " + trainName);
+        System.out.println("Available Seats: " + availableSeats);
+        System.out.println("----------------------");
+    }
+
+    @Override
+    public void bookTicket(int seats) {
+        if (seats <= availableSeats) {
+            availableSeats -= seats;
+            System.out.println(seats + " Ticket(s) Booked Successfully");
+        } else {
+            System.out.println("Not enough seats available");
+        }
+    }
+
+    @Override
+    public void cancelTicket(int seats) {
+        availableSeats += seats;
+        System.out.println(seats + " Ticket(s) Cancelled");
+    }
+}
+
+// Main Class
+public class TrainBookingSystem {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        ArrayList<Train> trains = new ArrayList<>();
+
+        trains.add(new Train(101, "Chennai Express", 100));
+        trains.add(new Train(102, "Madurai Superfast", 80));
+        trains.add(new Train(103, "Coimbatore Intercity", 60));
+
+        int choice;
+
+        do {
+
+            System.out.println("\n--- TRAIN BOOKING SYSTEM ---");
+            System.out.println("1. View Trains");
+            System.out.println("2. Book Ticket");
+            System.out.println("3. Cancel Ticket");
+            System.out.println("4. Exit");
+
+            System.out.print("Enter Choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+
+                case 1:
+                    for (Train t : trains) {
+                        t.displayTrain();
+                    }
+                    break;
+
+                case 2:
+                    System.out.print("Enter Train Number: ");
+                    int trainNo = sc.nextInt();
+
+                    for (Train t : trains) {
+                        if (t.getTrainNumber() == trainNo) {
+                            System.out.print("Enter Number of Seats: ");
+                            int seats = sc.nextInt();
+                            t.bookTicket(seats);
+                        }
+                    }
+                    break;
+
+                case 3:
+                    System.out.print("Enter Train Number: ");
+                    int trainNo2 = sc.nextInt();
+
+                    for (Train t : trains) {
+                        if (t.getTrainNumber() == trainNo2) {
+                            System.out.print("Enter Seats to Cancel: ");
+                            int seats = sc.nextInt();
+                            t.cancelTicket(seats);
+                        }
+                    }
+                    break;
+
+                case 4:
+                    System.out.println("Thank you for using Train Booking System");
+                    break;
+
+                default:
+                    System.out.println("Invalid Choice");
+
+            }
+
+        } while (choice != 4);
+
+        sc.close();
+    }
+}
